@@ -1,8 +1,14 @@
 import {  Image, Alert, StyleSheet, Text, TextInput, View, TouchableOpacity, StatusBar } from 'react-native';
 import { FC, useState } from 'react';
 import EventList from './components/EventList';
+import NavBar from './components/NavBar';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 export default function App() {
+
+  const Stack = createNativeStackNavigator();
+
   const [text1, onText1Change] = useState<string>()
   const [text2, onText2Change] = useState<string>()
   const [text3, onText3Change] = useState<string>()
@@ -15,36 +21,16 @@ export default function App() {
   }
 
   return (
-    // <View style={styles.container}>
-    // <Image style={styles.avatar} source={require('./assets/icon.png')}></Image>
-    // <TextInput
-    // style={styles.input}
-    // onChangeText={onText1Change}
-    // placeholder="input name"
-    // value={text1}
-    // />
-    // <TextInput
-    // style={styles.input}
-    // onChangeText={onText2Change}
-    // value={text2}
-    // />
-    // <TextInput
-    // style={styles.input}
-    // onChangeText={onText3Change}
-    // value={text3}
-    // />
-    // <View style={styles.buttonsContainer}>
-    // <TouchableOpacity style={styles.button} onPress={pressHandler}>
-    // <Text style={styles.buttonText}>OK</Text>
-    // </TouchableOpacity>
-    // <TouchableOpacity style={styles.button} onPress={pressHandler}>
-    // <Text style={styles.buttonText}>CANCEL</Text>
-    // </TouchableOpacity>
-    // </View>
-    // </View>
-    <View style={styles.container}>
-      <EventList></EventList>
-    </View>
+    // <NavigationContainer>
+    //     <Stack.Navigator>
+    //       <Stack.Screen name="Home" component={EventList}/>
+    //       <Stack.Screen name="Profile" component={ProfileScreen} />
+    //     </Stack.Navigator>
+    // </NavigationContainer>
+      <View style={styles.container}>
+        <NavBar></NavBar>
+        <EventList></EventList>
+      </View>
   )
 }
 
