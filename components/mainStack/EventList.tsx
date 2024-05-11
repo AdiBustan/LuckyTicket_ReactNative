@@ -1,10 +1,11 @@
 import { FlatList, StyleSheet, View } from "react-native"
-import { IEvent } from "../moduls/IEvent"
-import Event from "./event/Event"
+import { IEvent } from "../../moduls/IEvent"
+import Event from "../event/Event"
+import NavBar from "./NavBar"
 
 
 
-function EventList() {
+function EventList ({ navigation } : any) {
     const dataset : IEvent[] = [
                             {id: "1", date: "02-05-2024", city: "Rishon Lezion", artist: "Ravid Plotnik", imgName: "https://picsum.photos/700"},
                             {id: "2", date: "23-10-2024", city: "Tel Aviv", artist: "Tuna", imgName: "https://picsum.photos/700"},
@@ -28,15 +29,18 @@ function EventList() {
         return dataset.map((data, i) => <Event data={data} key={i}/>)
     }
     return (
-        <View style={styles.container}>
-            <FlatList style={styles.list}
-              data={dataset}
-              keyExtractor={(item) => item.id}
-              renderItem={({ item }) => (
-                <Event data={item}/>
-              )}
-            />
-        </View>
+        <>
+            <NavBar navigation={navigation}></NavBar>
+            <View style={styles.container}>
+                <FlatList style={styles.list}
+                  data={dataset}
+                  keyExtractor={(item) => item.id}
+                  renderItem={({ item }) => (
+                    <Event data={item}/>
+                  )}
+                />
+            </View>
+        </>
     )
 }
 
