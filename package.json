@@ -17,6 +17,7 @@
     "@rneui/base": "^0.0.0-edge.2",
     "@rneui/themed": "^0.0.0-edge.2",
     "expo": "~50.0.14",
+    "expo-image-picker": "^15.0.4",
     "expo-secure-store": "~12.8.1",
     "expo-status-bar": "~1.11.1",
     "native-base": "^3.4.28",

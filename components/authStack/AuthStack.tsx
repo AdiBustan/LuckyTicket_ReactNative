@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import SignUpPage from './SignUpPage';
-import * as SecureStore from 'expo-secure-store';
 import LandingPage from './LandingPage';
 import LoginPage from './LogInPage';
 

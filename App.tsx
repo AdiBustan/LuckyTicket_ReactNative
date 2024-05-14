@@ -3,7 +3,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import AuthStack from './components/authStack/AuthStack';
 import MainStack from './components/mainStack/MainStack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as SecureStore from 'expo-secure-store';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginPage from './components/authStack/LogInPage';
 import LandingPage from './components/authStack/LandingPage';
@@ -32,7 +31,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen name='landingPage' component={LandingPage} />
+        <Stack.Screen name='LandingPage' component={LandingPage} />
         <Stack.Screen name="LogIn" component={LoginPage} />
         <Stack.Screen name="SignUp" component={SignUpPage}/>
         <Stack.Screen name="Home" component={EventList}/>

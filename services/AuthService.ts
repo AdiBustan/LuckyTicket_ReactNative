@@ -1,11 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as SecureStore from 'expo-secure-store';
 
 
 export async function saveUserData(userData : any) {
     try {
         console.log(JSON.stringify(userData));
-        await SecureStore.setItemAsync('userData', JSON.stringify(userData));
+        await AsyncStorage.setItem('userData', JSON.stringify(userData));
         await AsyncStorage.setItem('user_id', '123456');
         console.log('User data saved successfully!');
       } catch (error) {
@@ -15,7 +14,7 @@ export async function saveUserData(userData : any) {
 
 export async function onLogOut() {
     try {
-      await SecureStore.deleteItemAsync('userData');
+      // await AsyncStorage.deleteItemAsync('userData');
       AsyncStorage.clear;
       console.log('User data removed successfully!');
     } catch (error) {
