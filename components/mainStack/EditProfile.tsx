@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 import { Input, Button, Avatar, Text } from '@rneui/base';
 import { saveUserData } from '../../services/AuthService';
@@ -7,44 +7,52 @@ import * as ImagePicker from 'expo-image-picker';
 import { KeyboardAvoidingView } from 'native-base';
 
 
-const SignUpPage = ({ navigation } : any) => {
+const EditProfile = ({ navigation, route } : any) => {
   const [avatarUri, setAvatarUri] = useState('');
+  const [username, setUserName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [picture, setPicture] = useState('');
+  const [user_id, setUser_id] = useState('');
 
-  const [userData, setUserData] = useState({
-    picture: '',
-    username: '',
-    email: '',
-    phone: '',
-    password: '',
-  });
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+    setPicture( route.params.picture );
+    setUserName( route.params.username );
+    setEmail( route.params.email );
+    setPhone( route.params.phone );
+    setUser_id( route.params.user_id );
+    console.log("UseEffect - Edit profile");
+    });
 
-
-  const handleSignUp = async () => {
+    return unsubscribe;
+  }, [navigation])
+  
+  const handleSave = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(userData.email)) {
+    if (!emailRegex.test(email)) {
       Alert.alert('Invalid Email', 'Please enter a valid email address.');
       return;
     }
 
-    if (userData.phone.length < 9 ) {
+    if (phone.length < 9 ) {
       Alert.alert('Invalid Phone number', 'Phone number must be valid.');
       return;
     }
 
-    if (userData.password.length < 6) {
-      Alert.alert('Invalid Password', 'Password must be at least 6 characters long.');
-      return;
+    const userData = {
+      Username: username,
+      Email: email,
+      Phone: phone,
+      Picture: picture,
     }
-
     saveUserData(userData);
 
-    console.log('Username:', userData.username);
-    console.log('Email:', userData.email);
-    console.log('Phone:', userData.phone);
-    console.log('Password:', userData.password);
-    console.log('Avatar URI:', userData.picture);
-
-    navigation.navigate('Home');
+    navigation.navigate('Profile', {picture: picture, 
+                                    username: username, 
+                                    email: email,
+                                    phone: phone,
+                                    user_id: user_id});
   };
 
   const handleChooseAvatar = async () => {
@@ -57,7 +65,7 @@ const SignUpPage = ({ navigation } : any) => {
 
     if (!result.canceled) {
       setAvatarUri(result.assets[0].uri);
-      setUserData({ ...userData, picture: result.assets[0].uri})
+      setPicture( result.assets[0].uri )
     }
   };
 
@@ -68,47 +76,37 @@ const SignUpPage = ({ navigation } : any) => {
         flex: 1
       }}>
     <View style={styles.container}>
-      <Text style={styles.heading}>Sign Up</Text>
+      <Text style={styles.heading}>Edit Profile</Text>
       <TouchableOpacity onPress={handleChooseAvatar}>
         <Avatar
           rounded
           size="xlarge"
-          source={avatarUri ? { uri: avatarUri } : { uri: 'https://i.pinimg.com/564x/dc/c9/f5/dcc9f5cf6a8051865296ab6e796108c6.jpg'}}
+          source={picture ? { uri: picture } : { uri: 'https://i.pinimg.com/564x/dc/c9/f5/dcc9f5cf6a8051865296ab6e796108c6.jpg'}}
           containerStyle={styles.avatar}
         />
       </TouchableOpacity>
       <TextInput
         style={styles.input}
-        placeholder="Username"
-        value={userData.username}
-        onChangeText={(value) => setUserData({ ...userData, username: value })}
+        placeholder={username}
+        value={username}
+        onChangeText={(value) => setUserName( value )}
       />
       <TextInput
         style={styles.input}
-        placeholder="Email"
-        value={userData.email}
+        placeholder={email}
+        value={email}
         keyboardType="email-address"
-        onChangeText={(value) => setUserData({ ...userData, email: value })}
+        onChangeText={(value) => setEmail( value )}
       />
       <TextInput
         style={styles.input}
-        placeholder="Phone"
-        value={userData.phone}
+        placeholder={phone}
+        value={phone}
         keyboardType="phone-pad"
-        onChangeText={(value) => setUserData({ ...userData, phone: value })}
+        onChangeText={(value) => setPhone( value )}
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-        value={userData.password}
-        onChangeText={(value) => setUserData({ ...userData, password: value })}
-      />
-      <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp}>
-        <Text style={styles.signUpButtonText}>Sign Up</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('LogIn')}>
-        <Text style={styles.loginLink}>Already have an account? Login</Text>
+      <TouchableOpacity style={styles.signUpButton} onPress={handleSave}>
+        <Text style={styles.signUpButtonText}>Save</Text>
       </TouchableOpacity>
     </View>
     </ScrollView>
@@ -160,4 +158,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignUpPage;
+export default EditProfile;

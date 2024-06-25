@@ -36,7 +36,7 @@ function EventList ({ navigation } : any) {
                   data={dataset}
                   keyExtractor={(item) => item.id}
                   renderItem={({ item }) => (
-                    <Event data={item}/>
+                    <Event navigation={navigation} data={item}/>
                   )}
                 />
             </View>

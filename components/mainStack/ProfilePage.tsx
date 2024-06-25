@@ -11,6 +11,7 @@ import { IUser, getUserByEmail } from '../../services/User-service';
 const ProfilePage = ({ navigation, route } : any) => {
   const [username, setUserName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [user_id, setUser_id] = useState('');
   const [picture, setPicture] = useState('');
 
@@ -22,16 +23,26 @@ const ProfilePage = ({ navigation, route } : any) => {
 
   const handleEdit = async () => {
     console.log("Click on edit profile");
+    navigation.navigate('EditProfile', {picture: picture, 
+                                        username: username, 
+                                        email: email,
+                                        phone: phone,
+                                        user_id: user_id});
   }
   
   useEffect(() => {
     console.log("Inside useeffect - profile page :", JSON.stringify(route.params.username));
-    setPicture(route.params.picture);
-    setUserName(route.params.username);
-    setEmail(route.params.email);
-    setUser_id(route.params.user_id);
-    console.log("After useeffect - profile page :", username);
-  }, [])
+    const unsubscribe = navigation.addListener('focus', () => {
+      setPicture(route.params.picture);
+      setUserName(route.params.username);
+      setEmail(route.params.email);
+      setPhone(route.params.phone);
+      setUser_id(route.params.user_id);
+      console.log("After useeffect - profile page :", username);
+    });
+    
+    return unsubscribe;
+  }, [navigation])
 
 
   return (
@@ -63,6 +74,7 @@ const ProfilePage = ({ navigation, route } : any) => {
           />
           <Text h4 style={styles.name}>{username}</Text>
           <Text style={styles.email}>{email}</Text>
+          <Text style={styles.email}>{phone}</Text>
         </View>
         <Divider style={styles.divider} />
         <Text h4 style={styles.sectionTitle}>My Events</Text>

@@ -10,7 +10,7 @@ const LoginPage = ({ navigation } : any) => {
     console.log('Username:', username);
     console.log('Password:', password);
     // After successful login, navigate to the main app screen
-    navigation.navigate('MainApp');
+    navigation.navigate('Home');
   };
 
   const handleSignUp = () => {

@@ -12,6 +12,7 @@ const NavBar = ({ navigation } : any) => {
       picture: '',
       username: '',
       email: '',
+      phone: '',
       user_id: ''
     });
 
@@ -59,7 +60,8 @@ const NavBar = ({ navigation } : any) => {
                       onPress={() => {
                         navigation.navigate('Profile', {picture: userData.picture, 
                                                         username: userData.username, 
-                                                        email: userData.email, 
+                                                        email: userData.email,
+                                                        phone: userData.phone, 
                                                         user_id: userData.user_id}); 
                         setExpanded(!expanded)}}>
               <ListItem.Content >
