@@ -9,6 +9,8 @@ import LandingPage from './components/authStack/LandingPage';
 import SignUpPage from './components/authStack/SignUpPage';
 import EventList from './components/mainStack/EventList';
 import ProfilePage from './components/mainStack/ProfilePage';
+import EventDetails from './components/mainStack/EventDetails';
+import EditProfile from './components/mainStack/EditProfile';
 
 const authStack = createStackNavigator()
 const mainStack = createStackNavigator()
@@ -35,7 +37,9 @@ const App = () => {
         <Stack.Screen name="LogIn" component={LoginPage} />
         <Stack.Screen name="SignUp" component={SignUpPage}/>
         <Stack.Screen name="Home" component={EventList}/>
+        <Stack.Screen name="EventDetails" component={EventDetails} />
         <Stack.Screen name="Profile" component={ProfilePage} />
+        <Stack.Screen name="EditProfile" component={EditProfile} />
       </Stack.Navigator>
     </NavigationContainer>
   );
