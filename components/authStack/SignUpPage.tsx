@@ -4,11 +4,14 @@ import { Input, Button, Avatar, Text } from '@rneui/base';
 import { saveUserData } from '../../services/AuthService';
 import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import * as ImagePicker from 'expo-image-picker';
-import { KeyboardAvoidingView } from 'native-base';
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../config"
+
 
 
 const SignUpPage = ({ navigation } : any) => {
   const [avatarUri, setAvatarUri] = useState('');
+  const [errorState, setErrorState] = useState("");
 
   const [userData, setUserData] = useState({
     picture: '',
@@ -35,7 +38,9 @@ const SignUpPage = ({ navigation } : any) => {
       Alert.alert('Invalid Password', 'Password must be at least 6 characters long.');
       return;
     }
-
+    createUserWithEmailAndPassword( auth, userData.email, userData.password).catch((error) =>
+      setErrorState(error.message)
+    );
     saveUserData(userData);
 
     console.log('Username:', userData.username);
@@ -161,3 +166,4 @@ const styles = StyleSheet.create({
 });
 
 export default SignUpPage;
+
