@@ -27,7 +27,6 @@ const ProfilePage = ({ navigation, route } : any) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
     setPicture( route.params.picture );
-    console.log("========== recive: " + route.params.username)
     setUserName( route.params.username );
     setEmail( route.params.email );
     setPhone( route.params.phone );

@@ -40,7 +40,6 @@ const EditProfile = ({ navigation, route } : any) => {
     }
 
     await addUser(userData);
-    console.log("========== sent: " + username)
     navigation.navigate('Home');
   };
 
@@ -54,7 +53,6 @@ const EditProfile = ({ navigation, route } : any) => {
 
     if (!result.canceled) {
       setPicture( result.assets[0].uri )
-      console.log("=======" + result.assets[0].uri )
     }
   };
 
