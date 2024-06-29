@@ -4,7 +4,7 @@ import { Input, Button, Avatar, Text } from '@rneui/base';
 import { saveUserData } from '../../services/AuthService';
 import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import * as ImagePicker from 'expo-image-picker';
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from "../../config"
 
 
@@ -38,7 +38,8 @@ const SignUpPage = ({ navigation } : any) => {
       Alert.alert('Invalid Password', 'Password must be at least 6 characters long.');
       return;
     }
-    createUserWithEmailAndPassword( auth, userData.email, userData.password).catch((error) =>
+    
+    createUserWithEmailAndPassword( auth, userData.email, userData.password).catch((error: { message: React.SetStateAction<string>; }) =>
       setErrorState(error.message)
     );
     saveUserData(userData);

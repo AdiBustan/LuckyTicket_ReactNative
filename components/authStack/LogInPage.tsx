@@ -15,9 +15,9 @@ const LoginPage = ({ navigation } : any) => {
 
     try {
       // Perform login logic here, e.g., validate credentials
-      await signInWithEmailAndPassword(auth, email, password).catch((error) => {
+      await signInWithEmailAndPassword(auth, email, password).catch((error: any) => {
         isSucces = false;
-        Alert.alert("Email or password are  incorrect");
+        Alert.alert("Email or password are incorrect");
         return;
       });
     } catch {

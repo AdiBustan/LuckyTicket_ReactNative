@@ -5,8 +5,8 @@ import EventList from './EventList';
 import NavBar from './NavBar';
 import { onLogOut } from '../../services/AuthService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { IUser, getUserByEmail } from '../../services/User-service';
-
+import { signOut } from 'firebase/auth';
+import { auth } from "../../config"
 
 const ProfilePage = ({ navigation, route } : any) => {
   const [username, setUserName] = useState('');
@@ -18,7 +18,9 @@ const ProfilePage = ({ navigation, route } : any) => {
   const handleLogOut = async () => {
     console.log("Click on logout");
     onLogOut();
+    signOut(auth)
     navigation.navigate('LandingPage')
+
   }
 
   const handleEdit = async () => {
