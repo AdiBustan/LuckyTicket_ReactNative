@@ -11,7 +11,7 @@ export default function Event( { navigation, data } : any) {
           <TouchableOpacity onPress={() => {
                 navigation.navigate('EventDetails', {event : data})}}> 
             <ListItem 
-              containerStyle={{backgroundColor:"#2A3D5E", width:"95%", padding: 10}}
+              containerStyle={{backgroundColor:"#2A3D5E", width:"100%", padding: 10}}
               bottomDivider>
               <Avatar
                 rounded

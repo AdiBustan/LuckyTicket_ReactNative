@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 import { Input, Button, Avatar, Text } from '@rneui/base';
-import { saveUserData } from '../../services/AuthService';
+import { saveUser } from '../../services/AuthService';
 import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import * as ImagePicker from 'expo-image-picker';
 import { KeyboardAvoidingView } from 'native-base';
+import { User } from '../../moduls/IUser';
+import { addUser } from '../../services/UserService';
+import { uploadImage } from '../../services/imagesService';
 
 
 const EditProfile = ({ navigation, route } : any) => {
-  const [avatarUri, setAvatarUri] = useState('');
   const [username, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [picture, setPicture] = useState('');
-  const [user_id, setUser_id] = useState('');
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -21,38 +22,27 @@ const EditProfile = ({ navigation, route } : any) => {
     setUserName( route.params.username );
     setEmail( route.params.email );
     setPhone( route.params.phone );
-    setUser_id( route.params.user_id );
-    console.log("UseEffect - Edit profile");
     });
 
     return unsubscribe;
   }, [navigation])
   
   const handleSave = async () => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      Alert.alert('Invalid Email', 'Please enter a valid email address.');
-      return;
-    }
-
     if (phone.length < 9 ) {
       Alert.alert('Invalid Phone number', 'Phone number must be valid.');
       return;
     }
 
-    const userData = {
-      Username: username,
-      Email: email,
-      Phone: phone,
-      Picture: picture,
+    const userData : User = {
+      "username": username,
+      "email": email,
+      "phone": phone,
+      "imgName": picture.split('/').pop(),
     }
-    saveUserData(userData);
 
-    navigation.navigate('Profile', {picture: picture, 
-                                    username: username, 
-                                    email: email,
-                                    phone: phone,
-                                    user_id: user_id});
+     addUser(userData);
+     uploadImage(picture)
+    navigation.navigate('Home');
   };
 
   const handleChooseAvatar = async () => {
@@ -64,7 +54,6 @@ const EditProfile = ({ navigation, route } : any) => {
     });
 
     if (!result.canceled) {
-      setAvatarUri(result.assets[0].uri);
       setPicture( result.assets[0].uri )
     }
   };
@@ -90,13 +79,6 @@ const EditProfile = ({ navigation, route } : any) => {
         placeholder={username}
         value={username}
         onChangeText={(value) => setUserName( value )}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder={email}
-        value={email}
-        keyboardType="email-address"
-        onChangeText={(value) => setEmail( value )}
       />
       <TextInput
         style={styles.input}

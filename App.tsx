@@ -12,6 +12,8 @@ import ProfilePage from './components/mainStack/ProfilePage';
 import EventDetails from './components/mainStack/EventDetails';
 import EditProfile from './components/mainStack/EditProfile';
 import AddEventPage from './components/mainStack/AddEvent';
+import EditEvent from './components/mainStack/EditEvent';
+import EditEventPage from './components/mainStack/EditEvent';
 
 const authStack = createStackNavigator()
 const mainStack = createStackNavigator()
@@ -19,17 +21,6 @@ const Stack = createStackNavigator();
 
 
 const App = () => {
-  // const [authenticated, setAuthenticated] = useState(false);
-
-  // // Check authentication status when the app starts
-  // useEffect(() => {
-  //   var isAuthenticated = false;
-  //   if (AsyncStorage.getItem('user_id') != null) {
-  //     console.log('user_id: ' , AsyncStorage.getItem('user_id'));
-  //     isAuthenticated = true;  
-  //   } 
-  //   setAuthenticated(isAuthenticated);
-  // }, []);
 
   return (
     <NavigationContainer>
@@ -42,6 +33,7 @@ const App = () => {
         <Stack.Screen name="Profile" component={ProfilePage} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
         <Stack.Screen name="UploadEvent" component={AddEventPage} />
+        <Stack.Screen name="EditEvent" component={EditEventPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );

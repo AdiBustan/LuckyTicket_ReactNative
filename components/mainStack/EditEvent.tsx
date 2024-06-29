@@ -9,10 +9,11 @@ import { Dropdown } from 'react-native-element-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { IEvent } from '../../moduls/IEvent';
 import { Alert } from 'react-native';
-import { addEvent } from '../../services/EventService'
+import { addEvent, deleteEvent } from '../../services/EventService'
+import Datepicker from './Datepicker';
 import { uploadImage } from '../../services/imagesService';
 
-const AddEventPage = ({ navigation, route} : any) => {
+const EditEventPage = ({ navigation, route} : any) => {
   const [pictureUri, setPictureUri] = useState('../../assets/upload_icon.png');
   const [options, setOptions] = useState([{ label: "Tel Aviv, Israel" }])
   const [artist, setArtist] = useState('')
@@ -25,7 +26,15 @@ const AddEventPage = ({ navigation, route} : any) => {
   
   useEffect(() => {
     fetchLocations();
-  }, [])
+    const unsubscribe = navigation.addListener('focus', () => {
+        setArtist( route.params.event.artist );
+        setCity( route.params.event.city );
+        setDate( route.params.event.date );
+        setTime( route.params.event.time );
+        setPictureUri( route.params.event.imgName )
+      });
+      return unsubscribe;
+    }, [navigation])
 
   const fetchLocations = async () => {
     try {
@@ -69,6 +78,7 @@ const AddEventPage = ({ navigation, route} : any) => {
     if (!date || !time || !city || ! artist || !pictureUri) {
       Alert.alert('Missing Fields', 'Please enter all of the fields');
     } else {
+      await deleteEvent(route.params.event.artist)
       const eventToUpload: IEvent = {
       'date': date as string,
       'time': time as string,
@@ -78,7 +88,9 @@ const AddEventPage = ({ navigation, route} : any) => {
       }
       
       await addEvent(eventToUpload)
-      uploadImage(pictureUri)
+      await uploadImage(pictureUri)
+      console.log("======== url:  " + pictureUri)
+
       navigation.navigate('Home');
     }
     
@@ -101,17 +113,20 @@ const AddEventPage = ({ navigation, route} : any) => {
   return (
     <>
       <NavBar navigation={navigation}></NavBar>
+      <Icon name="arrow-back-ios" type="material" style={{paddingTop: 15, paddingRight: 330 }} 
+                      onPress = {() => {navigation.navigate('Home')}}
+                  />
       <View style={styles.container}>
             <TouchableOpacity onPress={handleChoosePicture}>
                 <Image
-                  defaultSource={require('../../assets/upload_icon.png')}
                   source={{ uri: pictureUri }}
                   containerStyle={styles.image}
                 />
             </TouchableOpacity>
             <TextInput
                 style={styles.input}
-                placeholder="Artist"
+                placeholder={artist}
+                value={artist}
                 onChangeText={newArtist => setArtist(newArtist)}
             />
             <Dropdown
@@ -120,8 +135,7 @@ const AddEventPage = ({ navigation, route} : any) => {
               maxHeight={200}
               labelField="label"
               valueField="label"
-              placeholder="City" 
-              placeholderStyle={styles.placeholderStyle}
+              placeholder={city}
               onChange={function (item: { label: string; }): void { setCity(item.label) }}
               />
               <SafeAreaView>
@@ -130,13 +144,13 @@ const AddEventPage = ({ navigation, route} : any) => {
                         buttonStyle={styles.dateButton} 
                         type="clear" 
                         onPress={() => setShowDate(true)} 
-                        title={tempTime.toISOString().split('T')[0]} 
+                        title={date} 
                     />
                     <Button 
                         buttonStyle={styles.dateButton} 
                         type="clear" 
                         onPress={() => setShowTime(true)} 
-                        title={tempTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} 
+                        title={time} 
                     />
                 </View>
                 {showDate && (
@@ -225,4 +239,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddEventPage;
+export default EditEventPage;

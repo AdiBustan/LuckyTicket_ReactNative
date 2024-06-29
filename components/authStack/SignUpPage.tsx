@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 import { Input, Button, Avatar, Text } from '@rneui/base';
-import { saveUserData } from '../../services/AuthService';
+import { saveUser } from '../../services/AuthService';
 import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import * as ImagePicker from 'expo-image-picker';
-import { KeyboardAvoidingView } from 'native-base';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from "../../config"
+import { addUser } from '../../services/UserService';
+import { User } from '../../moduls/IUser';
+import { uploadImage } from '../../services/imagesService';
+
 
 
 const SignUpPage = ({ navigation } : any) => {
   const [avatarUri, setAvatarUri] = useState('');
-
-  const [userData, setUserData] = useState({
-    picture: '',
-    username: '',
-    email: '',
-    phone: '',
-    password: '',
-  });
+  const [errorState, setErrorState] = useState("");
+  const [password, setPassword] = useState("")
+  const [userData, setUserData] = useState<User>();
 
 
   const handleSignUp = async () => {
@@ -31,19 +31,17 @@ const SignUpPage = ({ navigation } : any) => {
       return;
     }
 
-    if (userData.password.length < 6) {
+    if (password.length < 6) {
       Alert.alert('Invalid Password', 'Password must be at least 6 characters long.');
       return;
     }
-
-    saveUserData(userData);
-
-    console.log('Username:', userData.username);
-    console.log('Email:', userData.email);
-    console.log('Phone:', userData.phone);
-    console.log('Password:', userData.password);
-    console.log('Avatar URI:', userData.picture);
-
+    
+    createUserWithEmailAndPassword( auth, userData.email, password).catch((error: { message: React.SetStateAction<string>; }) =>
+      setErrorState(error.message)
+    );
+    saveUser(userData.email);
+    await addUser(userData)
+    uploadImage(avatarUri)
     navigation.navigate('Home');
   };
 
@@ -57,7 +55,7 @@ const SignUpPage = ({ navigation } : any) => {
 
     if (!result.canceled) {
       setAvatarUri(result.assets[0].uri);
-      setUserData({ ...userData, picture: result.assets[0].uri})
+      setUserData({ ...userData, imgName: result.assets[0].uri.split('/').pop()})
     }
   };
 
@@ -80,20 +78,17 @@ const SignUpPage = ({ navigation } : any) => {
       <TextInput
         style={styles.input}
         placeholder="Username"
-        value={userData.username}
         onChangeText={(value) => setUserData({ ...userData, username: value })}
       />
       <TextInput
         style={styles.input}
         placeholder="Email"
-        value={userData.email}
         keyboardType="email-address"
         onChangeText={(value) => setUserData({ ...userData, email: value })}
       />
       <TextInput
         style={styles.input}
         placeholder="Phone"
-        value={userData.phone}
         keyboardType="phone-pad"
         onChangeText={(value) => setUserData({ ...userData, phone: value })}
       />
@@ -101,8 +96,7 @@ const SignUpPage = ({ navigation } : any) => {
         style={styles.input}
         placeholder="Password"
         secureTextEntry
-        value={userData.password}
-        onChangeText={(value) => setUserData({ ...userData, password: value })}
+        onChangeText={(value) => setPassword(value)}
       />
       <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp}>
         <Text style={styles.signUpButtonText}>Sign Up</Text>
@@ -161,3 +155,4 @@ const styles = StyleSheet.create({
 });
 
 export default SignUpPage;
+

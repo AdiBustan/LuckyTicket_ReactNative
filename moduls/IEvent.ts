@@ -3,6 +3,7 @@ export interface IEvent {
     time: string;
     city: string;
     artist: string;
-    // ownerId: string;
     imgName: string; 
+    owner?: string;
+    phone?: string;
 }

@@ -1,16 +1,33 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../config";
+import { saveUser } from '../../services/AuthService';
 
 const LoginPage = ({ navigation } : any) => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    // Perform login logic here, e.g., validate credentials
-    console.log('Username:', username);
-    console.log('Password:', password);
-    // After successful login, navigate to the main app screen
-    navigation.navigate('Home');
+  const handleLogin = async () => {
+    var isSucces : boolean = true;
+
+    try {
+      // Perform login logic here, e.g., validate credentials
+      await signInWithEmailAndPassword(auth, email, password).catch((error: any) => {
+        isSucces = false;
+        Alert.alert("Email or password are incorrect");
+        return;
+      });
+    } catch {
+      return;
+    }
+    
+    if (isSucces) {
+      saveUser(email)
+      navigation.navigate('Home');
+    }
+    
   };
 
   const handleSignUp = () => {
@@ -19,13 +36,19 @@ const LoginPage = ({ navigation } : any) => {
   };
 
   return (
+    <ScrollView
+      automaticallyAdjustKeyboardInsets={true}
+      contentContainerStyle={{
+        flex: 1
+      }}>
     <View style={styles.container}>
       <Text style={styles.heading}>Login</Text>
       <TextInput
         style={styles.input}
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
+        placeholder="Email"
+        value={email}
+        keyboardType="email-address"
+        onChangeText={setEmail}
       />
       <TextInput
         style={styles.input}
@@ -41,6 +64,7 @@ const LoginPage = ({ navigation } : any) => {
         <Text style={styles.signUpLink}>Sign Up</Text>
       </TouchableOpacity>
     </View>
+    </ScrollView>
   );
 };
 
