@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 import { Input, Button, Avatar, Text } from '@rneui/base';
-import { saveUserData } from '../../services/AuthService';
+import { saveUser } from '../../services/AuthService';
 import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import * as ImagePicker from 'expo-image-picker';
 import { KeyboardAvoidingView } from 'native-base';
@@ -22,7 +22,6 @@ const EditProfile = ({ navigation, route } : any) => {
     setEmail( route.params.email );
     setPhone( route.params.phone );
     setUser_id( route.params.user_id );
-    console.log("UseEffect - Edit profile");
     });
 
     return unsubscribe;
@@ -46,7 +45,7 @@ const EditProfile = ({ navigation, route } : any) => {
       Phone: phone,
       Picture: picture,
     }
-    saveUserData(userData);
+    saveUser(userData.Email);
 
     navigation.navigate('Profile', {picture: picture, 
                                     username: username, 

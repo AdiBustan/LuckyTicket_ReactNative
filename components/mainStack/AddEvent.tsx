@@ -9,9 +9,11 @@ import { Dropdown } from 'react-native-element-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { IEvent } from '../../moduls/IEvent';
 import { Alert } from 'react-native';
+import { addEvent } from '../../services/EventService'
+import Datepicker from './Datepicker';
 
-const AddEventPage = ({ navigation } : any) => {
-  const [pictureUri, setPictureUri] = useState('');
+const AddEventPage = ({ navigation, route} : any) => {
+  const [pictureUri, setPictureUri] = useState('../../assets/upload_icon.png');
   const [options, setOptions] = useState([{ label: "Tel Aviv, Israel" }])
   const [artist, setArtist] = useState('')
   const [city, setCity] = useState('')
@@ -30,7 +32,6 @@ const AddEventPage = ({ navigation } : any) => {
       await axios
         .get("https://countriesnow.space/api/v0.1/countries")
         .then((res) => {
-          // console.log(res.data.data);
           const all: { label: string }[] = [];
           res.data.data.map((location: any) => {
             if (location.country == "Israel") {
@@ -49,14 +50,18 @@ const AddEventPage = ({ navigation } : any) => {
     }
   };
   
-  const onChangeDate = (selectedDate : any) => { 
+  const onChangeDate = (event : any, selectedDate : any) => { 
+    const currentDate = selectedDate;
     setShowDate(false)
-    setTempTime(selectedDate)
+    setTempTime(currentDate)
+    setDate(selectedDate.toISOString().split('T')[0])
   };
 
-  const onChangeTime = (selectedTime : any) => { 
+  const onChangeTime = (event : any, selectedDate : any) => { 
+    const currentDate = selectedDate;
     setShowTime(false)
-    setTempTime(selectedTime)
+    setTempTime(currentDate)
+    setTime(selectedDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}))
   };
 
   const handleSubmit = async () => {
@@ -71,6 +76,9 @@ const AddEventPage = ({ navigation } : any) => {
       'artist': artist as string,
       'imgName': pictureUri as string,
       }
+      
+      await addEvent(eventToUpload)
+
       navigation.navigate('Home');
     }
     
@@ -89,7 +97,6 @@ const AddEventPage = ({ navigation } : any) => {
     }
   };
 
-  
 
   return (
     <>

@@ -12,35 +12,27 @@ const ProfilePage = ({ navigation, route } : any) => {
   const [username, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [user_id, setUser_id] = useState('');
   const [picture, setPicture] = useState('');
 
   const handleLogOut = async () => {
-    console.log("Click on logout");
     onLogOut();
     signOut(auth)
     navigation.navigate('LandingPage')
-
   }
 
   const handleEdit = async () => {
-    console.log("Click on edit profile");
     navigation.navigate('EditProfile', {picture: picture, 
                                         username: username, 
                                         email: email,
-                                        phone: phone,
-                                        user_id: user_id});
+                                        phone: phone});
   }
   
   useEffect(() => {
-    console.log("Inside useeffect - profile page :", JSON.stringify(route.params.username));
     const unsubscribe = navigation.addListener('focus', () => {
       setPicture(route.params.picture);
       setUserName(route.params.username);
       setEmail(route.params.email);
       setPhone(route.params.phone);
-      setUser_id(route.params.user_id);
-      console.log("After useeffect - profile page :", username);
     });
     
     return unsubscribe;

@@ -1,23 +1,50 @@
 // import firestore from '@react-native-firebase/firestore';
 import { User } from '../moduls/IUser';
-import { firestore } from '../config/firebase';
+import { Firestore, doc, getDoc, setDoc } from 'firebase/firestore';
+import firestore from '@react-native-firebase/firestore';
+import { db } from '../config/firebase';
+import { collection, addDoc, getDocs } from 'firebase/firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const usersCollection = firestore().collection('Users');
 
 export async function addUser(user : User){
-   usersCollection.doc(user.email).set({ user })
-    .then(() => {
-        console.log('User added!');
-    });
+    try {
+        const docRef = doc(db, "users", user.email);
+        await setDoc(docRef, user);
+        // const docRef = await setDoc(collection(db, "users"), user);
+    } catch (e) {
+        console.error("Error adding document: ", e);
+    }
 }
 
-export async function updateUser(user : User){
-    usersCollection.doc(user.email).set({ user })
-    .then(() => {
-        console.log('User updete!');
-    });
+
+export const getCurrUser = async () => {
+    try {
+        const currUserEmail = await AsyncStorage.getItem('userData');
+        if (currUserEmail !== null) {
+            return await getUserByEmail(currUserEmail)
+        } else {
+            console.log('No user data found.');
+        }
+    } catch (error) {
+        console.error('Error retrieving user data:', error);
+    }
 }
 
-export const getUserByEmail = (email : string) => {
-    return (usersCollection.where('email', '==', email).get())
-}
+export const getUserByEmail = async (email : string) => {
+    const userRef = doc(db, 'users', email);
+    const userDoc = await getDoc(userRef);
+    if (userDoc.exists()) {
+        const user: User = {
+            "username": userDoc.data().username,
+            "email": userDoc.data().email,
+            "password": userDoc.data().password,
+            "phone": userDoc.data().phone,
+            "imgName": userDoc.data().imgName,
+          }
+      return user;
+    } else {
+      console.log('No such user!');
+      return null;
+    }
+  };

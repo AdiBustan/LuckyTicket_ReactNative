@@ -19,17 +19,6 @@ const Stack = createStackNavigator();
 
 
 const App = () => {
-  // const [authenticated, setAuthenticated] = useState(false);
-
-  // // Check authentication status when the app starts
-  // useEffect(() => {
-  //   var isAuthenticated = false;
-  //   if (AsyncStorage.getItem('user_id') != null) {
-  //     console.log('user_id: ' , AsyncStorage.getItem('user_id'));
-  //     isAuthenticated = true;  
-  //   } 
-  //   setAuthenticated(isAuthenticated);
-  // }, []);
 
   return (
     <NavigationContainer>

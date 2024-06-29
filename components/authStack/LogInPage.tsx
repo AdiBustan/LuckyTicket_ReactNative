@@ -3,6 +3,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../config";
+import { saveUser } from '../../services/AuthService';
 
 const LoginPage = ({ navigation } : any) => {
   const [email, setEmail] = useState('');
@@ -10,8 +11,6 @@ const LoginPage = ({ navigation } : any) => {
 
   const handleLogin = async () => {
     var isSucces : boolean = true;
-    console.log('Email:', email);
-    console.log('Password:', password);
 
     try {
       // Perform login logic here, e.g., validate credentials
@@ -24,8 +23,8 @@ const LoginPage = ({ navigation } : any) => {
       return;
     }
     
-    console.log('isSucces: ', isSucces);
     if (isSucces) {
+      saveUser(email)
       navigation.navigate('Home');
     }
     

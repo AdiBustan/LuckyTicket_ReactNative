@@ -2,43 +2,45 @@ import { FlatList, StyleSheet, View } from "react-native"
 import { IEvent } from "../../moduls/IEvent"
 import Event from "../event/Event"
 import NavBar from "./NavBar"
+import { getAllEvents } from "../../services/EventService"
+import { useCallback, useEffect, useState } from "react"
+import { CanceledError } from "axios"
+import { useFocusEffect } from "@react-navigation/native"
 
 
 
 function EventList ({ navigation } : any) {
-    const dataset : IEvent[] = [
-                            {id: "1", date: "02-05-2024", city: "Rishon Lezion", artist: "Ravid Plotnik", imgName: "https://picsum.photos/700"},
-                            {id: "2", date: "23-10-2024", city: "Tel Aviv", artist: "Tuna", imgName: "https://picsum.photos/700"},
-                            {id: "3", date: "02-05-2024", city: "Rishon Lezion", artist: "Ravid Plotnik", imgName: "https://picsum.photos/700"},
-                            {id: "4", date: "23-10-2024", city: "Tel Aviv", artist: "Tuna", imgName: "https://picsum.photos/700"},
-                            {id: "5", date: "02-05-2024", city: "Rishon Lezion", artist: "Ravid Plotnik", imgName: "https://picsum.photos/700"},
-                            {id: "6", date: "23-10-2024", city: "Tel Aviv", artist: "Tuna", imgName: "https://picsum.photos/700"},
-                            {id: "7", date: "02-05-2024", city: "Rishon Lezion", artist: "Ravid Plotnik", imgName: "https://picsum.photos/700"},
-                            {id: "8", date: "23-10-2024", city: "Tel Aviv", artist: "Tuna", imgName: "https://picsum.photos/700"},
-                            {id: "9", date: "02-05-2024", city: "Rishon Lezion", artist: "Ravid Plotnik", imgName: "https://picsum.photos/700"},
-                            {id: "10", date: "23-10-2024", city: "Tel Aviv", artist: "Tuna", imgName: "https://picsum.photos/700"},
-                            {id: "11", date: "02-05-2024", city: "Rishon Lezion", artist: "Ravid Plotnik", imgName: "https://picsum.photos/700"},
-                            {id: "12", date: "23-10-2024", city: "Tel Aviv", artist: "Tuna", imgName: "https://picsum.photos/700"},
-                            {id: "13", date: "02-05-2024", city: "Rishon Lezion", artist: "Ravid Plotnik", imgName: "https://picsum.photos/700"},
-                            {id: "14", date: "23-10-2024", city: "Tel Aviv", artist: "Tuna", imgName: "https://picsum.photos/700"},
-                            {id: "15", date: "02-05-2024", city: "Rishon Lezion", artist: "Ravid Plotnik", imgName: "https://picsum.photos/700"},
-                            {id: "16", date: "23-10-2024", city: "Tel Aviv", artist: "Tuna", imgName: "https://picsum.photos/700"}
-                            ]
+    const [dataset, setDataSet] = useState<IEvent[]>([])
+    const [error, setError] = useState()
 
-    const makeEvents = () => {
-        return dataset.map((data, i) => <Event data={data} key={i}/>)
-    }
+    const fetchEvents = async () => {
+        try {
+          const res = await getAllEvents();
+          setDataSet(res);
+        } catch (err) {
+          console.log(err);
+          if (err instanceof CanceledError) return;
+          setError(err.message);
+        }
+    };
+
+    useFocusEffect(
+        useCallback(() => {
+          fetchEvents();
+        }, [])
+      );
+    
     return (
         <>
-            <NavBar navigation={navigation}></NavBar>
-            <View style={styles.container}>
-                <FlatList style={styles.list}
-                  data={dataset}
-                  keyExtractor={(item) => item.id}
-                  renderItem={({ item }) => (
+        <NavBar navigation={navigation}></NavBar>
+        <View style={styles.container}>
+            <FlatList style={styles.list}
+                data={dataset}
+                keyExtractor={(item) => item.artist}
+                renderItem={({ item }) => (
                     <Event navigation={navigation} data={item}/>
-                  )}
-                />
+                )}
+            />
             </View>
         </>
     )

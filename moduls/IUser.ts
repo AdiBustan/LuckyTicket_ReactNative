@@ -4,7 +4,4 @@ export interface User {
     password?: string,
     phone?: string,
     imgName?: string,
-    _id?: string,
-    accessToken?: string,
-    refreshToken?: string
 }

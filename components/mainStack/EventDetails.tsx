@@ -6,22 +6,18 @@ import NavBar from './NavBar';
 
 const EventDetails = ( { navigation, route } : any ) => {
     const [event, setEvent] = useState<IEvent>();
-    const [phone, setPhone] = useState('');
 
     useEffect(() => {
         setEvent(route.params.event);
-        console.log('event data: ', event);
-        setPhone('0587299721');
-        //TODO - take user details according to owner ID
       }, [])
 
     const handleCallPress = () => {
-        Linking.openURL(`tel:${phone}`);
+        Linking.openURL(`tel:${event?.phone}`);
     };
 
     return (
         <>
-            <NavBar></NavBar>
+            <NavBar  navigation={navigation}></NavBar>
             <View style={styles.container}>
               <Icon name="arrow-back-ios" type="material" style={{paddingTop: 15, paddingRight: 330 }} 
                     onPress = {() => {navigation.navigate('Home')}}
@@ -38,12 +34,12 @@ const EventDetails = ( { navigation, route } : any ) => {
                     <Icon name="place" type="material" />
                     <Text style={styles.metadataText}>  {event?.city}</Text>{'\n'}
                     <Icon name="event" type="material" />
-                    <Text style={styles.metadataText}>  {event?.date}</Text>{'\n'}
+                    <Text style={styles.metadataText}>  {event?.date} {event?.time}</Text>{'\n'}
                     <Icon name="person" type="material" />
-                    <Text style={styles.metadataText}>  John Doe</Text> 
+                    <Text style={styles.metadataText}>  {event?.owner}</Text> 
                 </Text>
                 <Button
-                    title={phone}
+                    title={event?.phone}
                     icon={{
                       name: 'call',
                       type: 'material',
