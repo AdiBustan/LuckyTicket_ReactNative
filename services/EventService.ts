@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect } from 'react';
 import { db } from '../config/firebase';
 import { getCurrUser, getUserByEmail } from './UserService';
+import { getDownloadImage } from './imagesService';
 
 var currUser: User
 
@@ -36,13 +37,17 @@ export async function getAllEvents() : Promise<IEvent[]> {
     var allEvents: IEvent[] = []
     var i = 0
     const querySnapshot = await getDocs(collection(db, "events"));
-    querySnapshot.forEach((doc) => {
+    querySnapshot.forEach(async (doc) => {
+        console.log("=========" + doc.data().imgName)
+        const imgUri: string = (await getDownloadImage(doc.data().imgName))
+        
+        console.log("=========    imgUri    " + imgUri)
         allEvents[i] = {
             'date': doc.data().date as string,
             'time': doc.data().time as string,
             'city': doc.data().city as string,
             'artist': doc.data().artist as string,
-            'imgName': doc.data().imgName as string,
+            'imgName':  imgUri as string,
             'owner' : doc.data().owner as string,
             'phone': doc.data().phone as string
         }
@@ -58,13 +63,14 @@ export async function getEventsByUser() : Promise<IEvent[]> {
     var i = 0
     const q = query(collection(db, "events"), where("owner", "==", currUser.email));
     const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
+    querySnapshot.forEach(async (doc) => {
+        const imgUri: string = (await getDownloadImage(doc.data().imgName))
         allEvents[i] = {
             'date': doc.data().date as string,
             'time': doc.data().time as string,
             'city': doc.data().city as string,
             'artist': doc.data().artist as string,
-            'imgName': doc.data().imgName as string,
+            'imgName': imgUri as string,
             'owner' : doc.data().owner as string,
             'phone': doc.data().phone as string
         }

@@ -7,6 +7,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { KeyboardAvoidingView } from 'native-base';
 import { User } from '../../moduls/IUser';
 import { addUser } from '../../services/UserService';
+import { uploadImage } from '../../services/imagesService';
 
 
 const EditProfile = ({ navigation, route } : any) => {
@@ -36,10 +37,11 @@ const EditProfile = ({ navigation, route } : any) => {
       "username": username,
       "email": email,
       "phone": phone,
-      "imgName": picture,
+      "imgName": picture.split('/').pop(),
     }
 
-    await addUser(userData);
+     addUser(userData);
+     uploadImage(picture)
     navigation.navigate('Home');
   };
 
@@ -77,13 +79,6 @@ const EditProfile = ({ navigation, route } : any) => {
         placeholder={username}
         value={username}
         onChangeText={(value) => setUserName( value )}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder={email}
-        value={email}
-        keyboardType="email-address"
-        onChangeText={(value) => setEmail( value )}
       />
       <TextInput
         style={styles.input}

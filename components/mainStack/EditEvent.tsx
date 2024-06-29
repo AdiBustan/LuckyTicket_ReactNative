@@ -11,6 +11,7 @@ import { IEvent } from '../../moduls/IEvent';
 import { Alert } from 'react-native';
 import { addEvent, deleteEvent } from '../../services/EventService'
 import Datepicker from './Datepicker';
+import { uploadImage } from '../../services/imagesService';
 
 const EditEventPage = ({ navigation, route} : any) => {
   const [pictureUri, setPictureUri] = useState('../../assets/upload_icon.png');
@@ -77,16 +78,18 @@ const EditEventPage = ({ navigation, route} : any) => {
     if (!date || !time || !city || ! artist || !pictureUri) {
       Alert.alert('Missing Fields', 'Please enter all of the fields');
     } else {
+      await deleteEvent(route.params.event.artist)
       const eventToUpload: IEvent = {
       'date': date as string,
       'time': time as string,
       'city': city as string,
       'artist': artist as string,
-      'imgName': pictureUri as string,
+      'imgName': pictureUri.split('/').pop() as string,
       }
       
-      await deleteEvent(route.params.event.artist)
       await addEvent(eventToUpload)
+      await uploadImage(pictureUri)
+      console.log("======== url:  " + pictureUri)
 
       navigation.navigate('Home');
     }

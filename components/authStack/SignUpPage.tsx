@@ -8,6 +8,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from "../../config"
 import { addUser } from '../../services/UserService';
 import { User } from '../../moduls/IUser';
+import { uploadImage } from '../../services/imagesService';
 
 
 
@@ -39,7 +40,8 @@ const SignUpPage = ({ navigation } : any) => {
       setErrorState(error.message)
     );
     saveUser(userData.email);
-    addUser(userData)
+    await addUser(userData)
+    uploadImage(avatarUri)
     navigation.navigate('Home');
   };
 
@@ -53,7 +55,7 @@ const SignUpPage = ({ navigation } : any) => {
 
     if (!result.canceled) {
       setAvatarUri(result.assets[0].uri);
-      setUserData({ ...userData, imgName: result.assets[0].uri})
+      setUserData({ ...userData, imgName: result.assets[0].uri.split('/').pop()})
     }
   };
 

@@ -5,6 +5,7 @@ import firestore from '@react-native-firebase/firestore';
 import { db } from '../config/firebase';
 import { collection, addDoc, getDocs } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getDownloadImage } from './imagesService';
 
 
 export async function addUser(user : User){
@@ -35,11 +36,14 @@ export const getUserByEmail = async (email : string) => {
     const userRef = doc(db, 'users', email);
     const userDoc = await getDoc(userRef);
     if (userDoc.exists()) {
+        const imgUri: string = (await getDownloadImage(userDoc.data().imgName))
+
+        console.log("===== urllll: " + userDoc.data().imgName)
         const user: User = {
             "username": userDoc.data().username,
             "email": userDoc.data().email,
             "phone": userDoc.data().phone,
-            "imgName": userDoc.data().imgName,
+            "imgName": imgUri,
           }
       return user;
     } else {

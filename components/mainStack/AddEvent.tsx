@@ -10,7 +10,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { IEvent } from '../../moduls/IEvent';
 import { Alert } from 'react-native';
 import { addEvent } from '../../services/EventService'
-import Datepicker from './Datepicker';
+import { uploadImage } from '../../services/imagesService';
 
 const AddEventPage = ({ navigation, route} : any) => {
   const [pictureUri, setPictureUri] = useState('../../assets/upload_icon.png');
@@ -74,11 +74,11 @@ const AddEventPage = ({ navigation, route} : any) => {
       'time': time as string,
       'city': city as string,
       'artist': artist as string,
-      'imgName': pictureUri as string,
+      'imgName': pictureUri.split('/').pop() as string,
       }
       
       await addEvent(eventToUpload)
-
+      uploadImage(pictureUri)
       navigation.navigate('Home');
     }
     

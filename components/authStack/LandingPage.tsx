@@ -1,13 +1,12 @@
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { auth } from '../../config';
-import { authToAutoLogin } from '../../config/firebase';
+import { auth } from '../../config/firebase';
 
 const LandingPage = ({ navigation } :any) => {
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(authToAutoLogin, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in, navigate to the home page
         navigation.navigate('Home');
