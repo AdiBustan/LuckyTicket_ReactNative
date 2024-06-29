@@ -11,6 +11,7 @@ import EventList from './components/mainStack/EventList';
 import ProfilePage from './components/mainStack/ProfilePage';
 import EventDetails from './components/mainStack/EventDetails';
 import EditProfile from './components/mainStack/EditProfile';
+import AddEventPage from './components/mainStack/AddEvent';
 
 const authStack = createStackNavigator()
 const mainStack = createStackNavigator()
@@ -40,6 +41,7 @@ const App = () => {
         <Stack.Screen name="EventDetails" component={EventDetails} />
         <Stack.Screen name="Profile" component={ProfilePage} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
+        <Stack.Screen name="UploadEvent" component={AddEventPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );
