@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, View } from "react-native"
+import { FlatList, StyleSheet, View, ActivityIndicator } from "react-native"
 import { IEvent } from "../../moduls/IEvent"
 import Event from "../event/Event"
 import NavBar from "./NavBar"
@@ -12,8 +12,10 @@ import { useFocusEffect } from "@react-navigation/native"
 function EventList ({ navigation } : any) {
     const [dataset, setDataSet] = useState<IEvent[]>([])
     const [error, setError] = useState()
-
+    const [loading, setLoading] = useState(true);
+    
     const fetchEvents = async () => {
+        setLoading(true); // Set loading to true when starting the fetch
         try {
           const res = await getAllEvents();
           setDataSet(res);
@@ -21,6 +23,8 @@ function EventList ({ navigation } : any) {
           console.log(err);
           if (err instanceof CanceledError) return;
           setError(err.message);
+        } finally {
+            setLoading(false); // Set loading to false when fetch is complete
         }
     };
 
@@ -34,6 +38,11 @@ function EventList ({ navigation } : any) {
         <>
         <NavBar navigation={navigation}></NavBar>
         <View style={styles.container}>
+            {loading ? (
+                <View style={styles.spinnerContainer}>
+                    <ActivityIndicator size="large" />
+                </View>
+            ) : (
             <FlatList style={styles.list}
                 data={dataset}
                 keyExtractor={(item) => item.artist}
@@ -41,7 +50,8 @@ function EventList ({ navigation } : any) {
                     <Event navigation={navigation} data={item}/>
                 )}
             />
-            </View>
+            )}
+        </View>
         </>
     )
 }
@@ -54,6 +64,11 @@ const styles = StyleSheet.create({
     },
     list: {
         width: '95%'
+    },
+    spinnerContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 })
 

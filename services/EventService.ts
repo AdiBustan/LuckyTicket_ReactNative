@@ -1,6 +1,6 @@
 import { IEvent } from '../moduls/IEvent';
 import { User } from '../moduls/IUser'
-import { collection, addDoc, getDocs, doc, setDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, doc, setDoc, query, where, deleteDoc } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect } from 'react';
 import { db } from '../config/firebase';
@@ -51,4 +51,34 @@ export async function getAllEvents() : Promise<IEvent[]> {
     return allEvents
 }
 
+export async function getEventsByUser() : Promise<IEvent[]> {
+    currUser = await getCurrUser()
 
+    var allEvents: IEvent[] = []
+    var i = 0
+    const q = query(collection(db, "events"), where("owner", "==", currUser.email));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+        allEvents[i] = {
+            'date': doc.data().date as string,
+            'time': doc.data().time as string,
+            'city': doc.data().city as string,
+            'artist': doc.data().artist as string,
+            'imgName': doc.data().imgName as string,
+            'owner' : doc.data().owner as string,
+            'phone': doc.data().phone as string
+        }
+        i++
+    });
+    return allEvents
+}
+
+export async function deleteEvent(artist : string){
+    try {
+        const docRef = doc(db, "events", artist);
+        await deleteDoc(docRef);
+        //const docRef = await addDoc(collection(db, "events"), eventToUpload);
+    } catch (e) {
+        console.error("Error adding document: ", e);
+    }
+}

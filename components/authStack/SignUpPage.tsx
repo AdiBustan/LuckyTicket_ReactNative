@@ -14,7 +14,7 @@ import { User } from '../../moduls/IUser';
 const SignUpPage = ({ navigation } : any) => {
   const [avatarUri, setAvatarUri] = useState('');
   const [errorState, setErrorState] = useState("");
-
+  const [password, setPassword] = useState("")
   const [userData, setUserData] = useState<User>();
 
 
@@ -30,12 +30,12 @@ const SignUpPage = ({ navigation } : any) => {
       return;
     }
 
-    if (userData.password.length < 6) {
+    if (password.length < 6) {
       Alert.alert('Invalid Password', 'Password must be at least 6 characters long.');
       return;
     }
     
-    createUserWithEmailAndPassword( auth, userData.email, userData.password).catch((error: { message: React.SetStateAction<string>; }) =>
+    createUserWithEmailAndPassword( auth, userData.email, password).catch((error: { message: React.SetStateAction<string>; }) =>
       setErrorState(error.message)
     );
     saveUser(userData.email);
@@ -94,7 +94,7 @@ const SignUpPage = ({ navigation } : any) => {
         style={styles.input}
         placeholder="Password"
         secureTextEntry
-        onChangeText={(value) => setUserData({ ...userData, password: value })}
+        onChangeText={(value) => setPassword(value)}
       />
       <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp}>
         <Text style={styles.signUpButtonText}>Sign Up</Text>

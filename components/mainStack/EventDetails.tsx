@@ -3,25 +3,61 @@ import { View, Text, StyleSheet, Image, Linking } from 'react-native';
 import { IEvent } from '../../moduls/IEvent';
 import { Button, Icon } from '@rneui/base';
 import NavBar from './NavBar';
+import { getCurrUser } from '../../services/UserService';
+import { deleteEvent } from '../../services/EventService';
 
 const EventDetails = ( { navigation, route } : any ) => {
     const [event, setEvent] = useState<IEvent>();
+    const [currUserEmail, setCurrUserEmail] = useState('')
 
     useEffect(() => {
         setEvent(route.params.event);
+        findCurrUser()
       }, [])
+
+   
+    const findCurrUser = async () => {
+        const user = await getCurrUser()
+        setCurrUserEmail(user.email)
+    }
 
     const handleCallPress = () => {
         Linking.openURL(`tel:${event?.phone}`);
     };
 
+    const handleEdit = async () => {
+      navigation.navigate('EditEvent', {event: event});
+    }
+    
+    const handleDelete = async () => {
+      deleteEvent(event.artist)
+      navigation.navigate('Home');
+    }
+    
     return (
         <>
             <NavBar  navigation={navigation}></NavBar>
             <View style={styles.container}>
-              <Icon name="arrow-back-ios" type="material" style={{paddingTop: 15, paddingRight: 330 }} 
-                    onPress = {() => {navigation.navigate('Home')}}
-              />
+              <View style={{ flexDirection: 'row' }}>
+                { (event?.owner != currUserEmail)  &&
+                  <Icon name="arrow-back-ios" type="material" style={{paddingTop: 15, paddingRight: 330 }} 
+                      onPress = {() => {navigation.navigate('Home')}}
+                  />
+                }
+                { (event?.owner == currUserEmail)  &&
+                  <Icon name="arrow-back-ios" type="material" style={{paddingTop: 15, paddingRight: 260 }} 
+                      onPress = {() => {navigation.navigate('Home')}}
+                  />
+                }
+                { (event?.owner == currUserEmail)  &&
+                  <Icon style={{ paddingTop:15, paddingRight: 10}} name='edit' type='feather'size={28} onPress={handleEdit}
+                  />
+                }
+                { (event?.owner == currUserEmail)  &&
+                  <Icon style={{ paddingTop:15}} name='trash' type='feather'size={28} onPress={handleDelete}
+                  />
+                }
+              </View>
               <View style={styles.imageContainer}>
                 <Image
                   source={{ uri: event?.imgName }} // Example image URI

@@ -38,7 +38,6 @@ export const getUserByEmail = async (email : string) => {
         const user: User = {
             "username": userDoc.data().username,
             "email": userDoc.data().email,
-            "password": userDoc.data().password,
             "phone": userDoc.data().phone,
             "imgName": userDoc.data().imgName,
           }
