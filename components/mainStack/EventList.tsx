@@ -60,7 +60,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor:"#2A3D5E"
+        backgroundColor:"#1F2D45",
+        paddingTop: 110
     },
     list: {
         width: '95%'

@@ -4,6 +4,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'reac
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../config";
 import { saveUser } from '../../services/AuthService';
+import { Icon } from '@rneui/base';
 
 const LoginPage = ({ navigation } : any) => {
   const [email, setEmail] = useState('');
@@ -42,6 +43,9 @@ const LoginPage = ({ navigation } : any) => {
         flex: 1
       }}>
     <View style={styles.container}>
+    <Icon name="arrow-back-ios" type="material" style={{paddingTop: 15, paddingRight: 330 }} 
+                      onPress = {() => {navigation.navigate('LandingPage')}}
+                  />
       <Text style={styles.heading}>Login</Text>
       <TextInput
         style={styles.input}
@@ -60,9 +64,6 @@ const LoginPage = ({ navigation } : any) => {
       <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
         <Text style={styles.loginButtonText}>Login</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={handleSignUp}>
-        <Text style={styles.signUpLink}>Sign Up</Text>
-      </TouchableOpacity>
     </View>
     </ScrollView>
   );
@@ -71,15 +72,16 @@ const LoginPage = ({ navigation } : any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    paddingTop: 70,
     alignItems: 'center',
     backgroundColor: '#fff',
   },
   heading: {
-    fontSize: 32,
+    fontSize: 35,
     fontWeight: 'bold',
-    marginBottom: 50,
-    color: '#007bff', // Blue color
+    marginTop: 150,
+    marginBottom: 70,
+    color: '#4C679E', // Blue color
   },
   input: {
     width: '80%',
@@ -92,21 +94,16 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   loginButton: {
-    backgroundColor: '#007bff', // Blue color
+    backgroundColor: '#4C679E', // Blue color
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 10,
-    marginBottom: 20,
+    marginTop: 40,
   },
   loginButtonText: {
     color: '#fff', // White color
     fontSize: 18,
     fontWeight: 'bold',
-  },
-  signUpLink: {
-    color: '#007bff', // Blue color
-    fontSize: 16,
-    textDecorationLine: 'underline',
   },
 });
 

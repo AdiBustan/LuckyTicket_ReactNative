@@ -89,7 +89,6 @@ const EditEventPage = ({ navigation, route} : any) => {
       
       await addEvent(eventToUpload)
       await uploadImage(pictureUri)
-      console.log("======== url:  " + pictureUri)
 
       navigation.navigate('Home');
     }
@@ -113,10 +112,11 @@ const EditEventPage = ({ navigation, route} : any) => {
   return (
     <>
       <NavBar navigation={navigation}></NavBar>
+      
+      <View style={styles.container}>
       <Icon name="arrow-back-ios" type="material" style={{paddingTop: 15, paddingRight: 330 }} 
                       onPress = {() => {navigation.navigate('Home')}}
                   />
-      <View style={styles.container}>
             <TouchableOpacity onPress={handleChoosePicture}>
                 <Image
                   source={{ uri: pictureUri }}
@@ -136,6 +136,9 @@ const EditEventPage = ({ navigation, route} : any) => {
               labelField="label"
               valueField="label"
               placeholder={city}
+              itemTextStyle= {{fontSize: 18}}
+              selectedTextStyle = {{fontSize: 18}}
+              placeholderStyle={styles.placeholderStyle}
               onChange={function (item: { label: string; }): void { setCity(item.label) }}
               />
               <SafeAreaView>
@@ -187,7 +190,7 @@ const styles = StyleSheet.create({
   container: {
       flex: 1,
       alignItems: 'center',
-      marginTop: '15%'
+      paddingTop: 110
   },
   dateContainer: {
     flexDirection: 'row', // Align children from left to right
@@ -202,19 +205,18 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 10,
     paddingHorizontal: 20,
-    marginBottom: 20,
+    marginBottom: 15,
     fontSize: 18,
   },
   placeholderStyle: {
     fontSize: 18,
-    color: '#C7C7CD'
   },
   uploadBtton: {
-    backgroundColor: '#007bff', // Blue color
+    backgroundColor: '#4C679E', // Blue color
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 10,
-    marginTop: 40,
+    marginTop: 20,
   },
   uploadButtonText: {
     color: '#fff', // White color
@@ -222,11 +224,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   image: {
-    width: 180,
-    height: 180,
+    width: 200,
+    height: 200,
     resizeMode: 'cover',
     borderRadius: 10,
-    marginBottom: 80
+    marginBottom: 40,
+    marginTop: 50
   },
   dateButton : {
     width: '70%',

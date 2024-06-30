@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
-import { Input, Button, Avatar, Text } from '@rneui/base';
+import { Input, Button, Avatar, Text, Icon } from '@rneui/base';
 import { saveUser } from '../../services/AuthService';
 import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import * as ImagePicker from 'expo-image-picker';
@@ -8,6 +8,7 @@ import { KeyboardAvoidingView } from 'native-base';
 import { User } from '../../moduls/IUser';
 import { addUser } from '../../services/UserService';
 import { uploadImage } from '../../services/imagesService';
+import NavBar from './NavBar';
 
 
 const EditProfile = ({ navigation, route } : any) => {
@@ -40,8 +41,8 @@ const EditProfile = ({ navigation, route } : any) => {
       "imgName": picture.split('/').pop(),
     }
 
-     addUser(userData);
-     uploadImage(picture)
+     await addUser(userData);
+     await uploadImage(picture)
     navigation.navigate('Home');
   };
 
@@ -59,54 +60,48 @@ const EditProfile = ({ navigation, route } : any) => {
   };
 
   return (
+    <>
+    <NavBar navigation={navigation}></NavBar>
     <ScrollView
       automaticallyAdjustKeyboardInsets={true}
       contentContainerStyle={{
         flex: 1
       }}>
-    <View style={styles.container}>
-      <Text style={styles.heading}>Edit Profile</Text>
-      <TouchableOpacity onPress={handleChooseAvatar}>
-        <Avatar
-          rounded
-          size="xlarge"
-          source={picture ? { uri: picture } : { uri: 'https://i.pinimg.com/564x/dc/c9/f5/dcc9f5cf6a8051865296ab6e796108c6.jpg'}}
-          containerStyle={styles.avatar}
+      <View style={styles.container}>
+        <Icon name="arrow-back-ios" type="material" style={{paddingTop: 15, paddingRight: 330 }} 
+                        onPress = {() => {navigation.navigate('Home')}}
         />
-      </TouchableOpacity>
-      <TextInput
-        style={styles.input}
-        placeholder={username}
-        value={username}
-        onChangeText={(value) => setUserName( value )}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder={phone}
-        value={phone}
-        keyboardType="phone-pad"
-        onChangeText={(value) => setPhone( value )}
-      />
-      <TouchableOpacity style={styles.signUpButton} onPress={handleSave}>
-        <Text style={styles.signUpButtonText}>Save</Text>
-      </TouchableOpacity>
-    </View>
-    </ScrollView>
+        <TouchableOpacity onPress={handleChooseAvatar}>
+          <Avatar
+            rounded
+            size= 'xlarge'
+            source={picture ? { uri: picture } : { uri: 'https://i.pinimg.com/564x/dc/c9/f5/dcc9f5cf6a8051865296ab6e796108c6.jpg' }}
+            containerStyle={styles.avatar} />
+        </TouchableOpacity>
+        <TextInput
+          style={styles.input}
+          placeholder={username}
+          value={username}
+          onChangeText={(value) => setUserName(value)} />
+        <TextInput
+          style={styles.input}
+          placeholder={phone}
+          value={phone}
+          keyboardType="phone-pad"
+          onChangeText={(value) => setPhone(value)} />
+        <TouchableOpacity style={styles.signUpButton} onPress={handleSave}>
+          <Text style={styles.signUpButtonText}>Save</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView></>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
-  },
-  heading: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    marginBottom: 50,
-    color: '#007bff', // Blue color
+    marginTop: 110
   },
   input: {
     width: '80%',
@@ -115,15 +110,15 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 10,
     paddingHorizontal: 20,
-    marginBottom: 20,
+    marginTop: 20,
     fontSize: 18,
   },
   signUpButton: {
-    backgroundColor: '#007bff', // Blue color
+    backgroundColor: '#4C679E', // Blue color
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 10,
-    marginBottom: 20,
+    marginTop: 30,
   },
   signUpButtonText: {
     color: '#fff', // White color
@@ -136,7 +131,8 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
   avatar: {
-    marginBottom: 20,
+    marginTop: 100,
+    marginBottom: 30,
   },
 });
 

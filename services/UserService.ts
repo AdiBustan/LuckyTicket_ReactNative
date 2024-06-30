@@ -38,7 +38,6 @@ export const getUserByEmail = async (email : string) => {
     if (userDoc.exists()) {
         const imgUri: string = (await getDownloadImage(userDoc.data().imgName))
 
-        console.log("===== urllll: " + userDoc.data().imgName)
         const user: User = {
             "username": userDoc.data().username,
             "email": userDoc.data().email,
