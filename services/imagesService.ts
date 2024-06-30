@@ -11,13 +11,12 @@ export async function uploadImage(uri: string) {
         // Create a reference to the file you want to upload
         const fileName = uri.split('/').pop();
         const storageRef = ref(storage, `images/${fileName}`);
-    
+
         // Upload the file
         const snapshot = await uploadBytes(storageRef, blob);
-    
+
         // Get the download URL
         const downloadURL = await getDownloadURL(snapshot.ref);
-        console.log('File available at', downloadURL);
         
         return downloadURL;
     } catch (error) {
@@ -31,7 +30,6 @@ export async function getDownloadImage(imgName: string) : Promise<string> {
     let urlToSend = ""
     await getDownloadURL(ref(storage, 'images/' + imgName))
     .then((url) => {
-        console.log("======== url:  " + url)
         urlToSend = url
     })
     .catch((error) => {

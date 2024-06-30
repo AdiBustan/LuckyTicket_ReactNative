@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
-import { Input, Button, Avatar, Text } from '@rneui/base';
+import { Input, Button, Avatar, Text, Icon } from '@rneui/base';
 import { saveUser } from '../../services/AuthService';
 import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import * as ImagePicker from 'expo-image-picker';
@@ -41,7 +41,7 @@ const SignUpPage = ({ navigation } : any) => {
     );
     saveUser(userData.email);
     await addUser(userData)
-    uploadImage(avatarUri)
+    await uploadImage(avatarUri)
     navigation.navigate('Home');
   };
 
@@ -66,6 +66,9 @@ const SignUpPage = ({ navigation } : any) => {
         flex: 1
       }}>
     <View style={styles.container}>
+    <Icon name="arrow-back-ios" type="material" style={{paddingTop: 15, paddingRight: 330 }} 
+                      onPress = {() => {navigation.navigate('LandingPage')}}
+                  />
       <Text style={styles.heading}>Sign Up</Text>
       <TouchableOpacity onPress={handleChooseAvatar}>
         <Avatar
@@ -101,9 +104,6 @@ const SignUpPage = ({ navigation } : any) => {
       <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp}>
         <Text style={styles.signUpButtonText}>Sign Up</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('LogIn')}>
-        <Text style={styles.loginLink}>Already have an account? Login</Text>
-      </TouchableOpacity>
     </View>
     </ScrollView>
   );
@@ -112,15 +112,15 @@ const SignUpPage = ({ navigation } : any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    paddingTop: 70,
     alignItems: 'center',
     backgroundColor: '#fff',
   },
   heading: {
-    fontSize: 32,
+    fontSize: 35,
     fontWeight: 'bold',
-    marginBottom: 50,
-    color: '#007bff', // Blue color
+    marginTop: 40,
+    color: '#4C679E', // Blue color
   },
   input: {
     width: '80%',
@@ -129,28 +129,24 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 10,
     paddingHorizontal: 20,
-    marginBottom: 20,
+    marginBottom: 10,
     fontSize: 18,
   },
   signUpButton: {
-    backgroundColor: '#007bff', // Blue color
+    backgroundColor: '#4C679E', // Blue color
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 10,
-    marginBottom: 20,
+    marginTop: 20,
   },
   signUpButtonText: {
     color: '#fff', // White color
     fontSize: 18,
     fontWeight: 'bold',
   },
-  loginLink: {
-    color: '#007bff', // Blue color
-    fontSize: 16,
-    textDecorationLine: 'underline',
-  },
   avatar: {
-    marginBottom: 20,
+    marginTop: 40,
+    marginBottom: 30
   },
 });
 

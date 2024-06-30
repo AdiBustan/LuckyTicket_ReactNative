@@ -78,7 +78,7 @@ const AddEventPage = ({ navigation, route} : any) => {
       }
       
       await addEvent(eventToUpload)
-      uploadImage(pictureUri)
+      await uploadImage(pictureUri)
       navigation.navigate('Home');
     }
     
@@ -121,6 +121,8 @@ const AddEventPage = ({ navigation, route} : any) => {
               labelField="label"
               valueField="label"
               placeholder="City" 
+              itemTextStyle= {{fontSize: 18}}
+              selectedTextStyle = {{fontSize: 18}}
               placeholderStyle={styles.placeholderStyle}
               onChange={function (item: { label: string; }): void { setCity(item.label) }}
               />
@@ -173,7 +175,7 @@ const styles = StyleSheet.create({
   container: {
       flex: 1,
       alignItems: 'center',
-      marginTop: '15%'
+      paddingTop: 170
   },
   dateContainer: {
     flexDirection: 'row', // Align children from left to right
@@ -188,19 +190,19 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 10,
     paddingHorizontal: 20,
-    marginBottom: 20,
-    fontSize: 18,
+    marginBottom: 15,
+    fontSize: 18
   },
   placeholderStyle: {
     fontSize: 18,
     color: '#C7C7CD'
   },
   uploadBtton: {
-    backgroundColor: '#007bff', // Blue color
+    backgroundColor: '#4C679E', // Blue color
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 10,
-    marginTop: 40,
+    marginTop: 20,
   },
   uploadButtonText: {
     color: '#fff', // White color
@@ -208,11 +210,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   image: {
-    width: 180,
-    height: 180,
+    width: 200,
+    height: 200,
     resizeMode: 'cover',
     borderRadius: 10,
-    marginBottom: 80
+    marginBottom: 40
   },
   dateButton : {
     width: '70%',

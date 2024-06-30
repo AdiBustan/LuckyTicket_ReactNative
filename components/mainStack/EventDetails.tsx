@@ -85,7 +85,7 @@ const EventDetails = ( { navigation, route } : any ) => {
                     iconContainerStyle={{ marginRight: 10 }}
                     titleStyle={{ fontWeight: '700' }}
                     buttonStyle={{
-                      backgroundColor: 'rgba(90, 154, 230, 1)',
+                      backgroundColor: '#4C679E',
                       borderColor: 'transparent',
                       borderWidth: 0,
                       borderRadius: 30,
@@ -94,6 +94,7 @@ const EventDetails = ( { navigation, route } : any ) => {
                         width: 200,
                         marginHorizontal: 50,
                         marginVertical: 10,
+                        marginTop: '10%'
                       }}
                     onPress={handleCallPress}
                     />
@@ -107,16 +108,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    // justifyContent: 'center',
-    backgroundColor: '#fff',
+    paddingTop: 110
   },
   imageContainer: {
-    marginTop: 110,
+    marginTop: 80,
     marginBottom: 20,
   },
   image: {
-    width: 250,
-    height: 250,
+    width: 220,
+    height: 220,
     resizeMode: 'cover',
     borderRadius: 10,
   },
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    fontSize: 28,
+    fontSize: 35,
     fontWeight: 'bold',
     marginBottom: 10,
   },

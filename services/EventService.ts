@@ -38,10 +38,8 @@ export async function getAllEvents() : Promise<IEvent[]> {
     var i = 0
     const querySnapshot = await getDocs(collection(db, "events"));
     querySnapshot.forEach(async (doc) => {
-        console.log("=========" + doc.data().imgName)
         const imgUri: string = (await getDownloadImage(doc.data().imgName))
         
-        console.log("=========    imgUri    " + imgUri)
         allEvents[i] = {
             'date': doc.data().date as string,
             'time': doc.data().time as string,
